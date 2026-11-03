@@ -1,0 +1,105 @@
+@font-face {
+  font-family: "HGKUnica77VIPBeta";
+  src: url("fonts/DMTLLVarSupsi-[SIZE,ROTA,wght].woff2") format("woff2");
+}
+
+
+:root{
+    --gap: clamp(6px, 1vw, 16px);
+    --padding: clamp(8px, 1vw, 16px);
+    --col: calc((100% - (3 * var(--gap))) / 4);
+     --color-pl1: #ff1618;
+     --color-pl2: #2317ff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.quadrato-esterno {
+    width: 80vw;
+    max-width: 80vh;
+    aspect-ratio: 1 / 1;
+    background-color: #adadad;
+    padding: var(--padding);
+    box-sizing: border-box;
+    display: flex;
+    border-radius: 12px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    width: 100%;
+    height: 100%;
+}
+
+.item-piccolo,
+.item-grande,
+.item-lungo {
+    border-radius: 8px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+
+.item-piccolo {
+    flex: 0 0 var(--col);
+    aspect-ratio: 1 / 1;
+}
+
+.item-grande {
+    flex: 0 0 calc((var(--col) * 2) + var(--gap));
+    aspect-ratio: 1 / 1;
+}
+
+.item-lungo {
+    flex: 0 0 calc((var(--col) * 2) + var(--gap));
+    height: var(--col);
+    
+}
+
+.pl1 {
+    background-color: var(--color-pl1);
+}
+
+.pl2 {
+    background-color: var(--color-pl2);
+}
+
+.base{
+    background-color: #dadada;
+}
+
+#text-grande {
+    font-family: "HGKUnica77VIPBeta";
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-variation-settings: 'wght' 400, 'ROTA' 0, 'SIZE' 0;
+    color: #ffffff;
+    outline: none;
+    border: none;
+    font-size: clamp(2vh, 18vh, 16vh);
+}
+
+#text-piccolo {
+    font-family: "HGKUnica77VIPBeta";
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-variation-settings: 'wght' 350, 'ROTA' 0, 'SIZE' 0;
+    color: #ffffff;
+    outline: none;
+    border: none;
+    font-size: clamp(2vh, 10vh, 9vh);
+}
