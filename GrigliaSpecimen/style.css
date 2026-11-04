@@ -3,10 +3,9 @@
   src: url("fonts/DMTLLVarSupsi-[SIZE,ROTA,wght].woff2") format("woff2");
 }
 
-
 :root{
-    --gap: clamp(6px, 1vw, 16px);
-    --padding: clamp(8px, 1vw, 16px);
+    --gap: clamp(4px, 1vw, 10px);
+    --padding: clamp(4px, 1vw, 10px);
     --col: calc((100% - (3 * var(--gap))) / 4);
      --color-pl1: #ff1618;
      --color-pl2: #2317ff;
@@ -18,7 +17,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffffff;
+    background-color: #000000;
 }
 
 .quadrato-esterno {
@@ -84,11 +83,11 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-variation-settings: 'wght' 400, 'ROTA' 0, 'SIZE' 0;
+    font-variation-settings: 'wght' 500, 'ROTA' 0, 'SIZE' 0;
     color: #ffffff;
     outline: none;
     border: none;
-    font-size: clamp(2vh, 18vh, 16vh);
+    font-size: clamp(4vh, 30vh, 30vh);
 }
 
 #text-piccolo {
@@ -97,9 +96,22 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-variation-settings: 'wght' 350, 'ROTA' 0, 'SIZE' 0;
+    font-variation-settings: 'wght' 450, 'ROTA' 0, 'SIZE' 0;
     color: #ffffff;
     outline: none;
     border: none;
-    font-size: clamp(2vh, 10vh, 9vh);
+    font-size: clamp(2vh, 15vh, 15vh);
+}
+
+#text-lungo {
+    font-family: "HGKUnica77VIPBeta";
+    margin: 0px;
+    justify-content: left;
+    align-items: left;
+    text-align: left;
+    font-variation-settings: 'wght' 350, 'ROTA' 100, 'SIZE' 60;
+    color: #000000;
+    outline: none;
+    border: none;
+    font-size: clamp();
 }
