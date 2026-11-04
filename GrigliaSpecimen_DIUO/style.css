@@ -1,15 +1,15 @@
 @font-face {
-  font-family: "DMT";
-  src: url("fonts/DMTLLVarSupsi-[SIZE,ROTA,wght].woff2") format("woff2");
+    font-family: "DMT";
+    src: url("fonts/DMTLLVarSupsi-[SIZE,ROTA,wght].woff2") format("woff2");
 }
 
 
-:root{
+:root {
     --gap: clamp(6px, 1vw, 16px);
     --padding: clamp(8px, 1vw, 16px);
     --col: calc((100% - (3 * var(--gap))) / 4);
-     --color-pl1: #ff1618;
-     --color-pl2: #2317ff;
+    --color-pl1: #ff1618;
+    --color-pl2: #2317ff;
 }
 
 body {
@@ -44,8 +44,8 @@ body {
 .item-grande,
 .item-lungo {
     border-radius: 8px;
-    display: flex; 
-    justify-content: center; 
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
@@ -53,8 +53,186 @@ body {
 .item-piccolo {
     flex: 0 0 var(--col);
     aspect-ratio: 1 / 1;
+
+    .controlli-font {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        color: #000000;
+        font-family: sans-serif;
+        font-size: 10px;
+    }
+.controlli-font2 {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        color: #000000;
+        font-family: sans-serif;
+        font-size: 10px;
+    }
+    .controlli-font label {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .controlli-font2 label {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .controlli-font input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 2px;
+        background: #ff1618;
+        outline: none;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+
+    .controlli-font input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 7px;
+        /* Dimensione del pallino */
+        height: 7px;
+        border-radius: 50%;
+        /* Lo rende perfettamente tondo */
+        background: #ff1618;
+        /* Colore del pallino */
+        cursor: pointer;
+        transition: transform 0.1s ease;
+
+    }
+
+    .controlli-font2 input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 2px;
+        background: #161aff;
+        outline: none;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+
+    .controlli-font2 input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 7px;
+        /* Dimensione del pallino */
+        height: 7px;
+        border-radius: 50%;
+        /* Lo rende perfettamente tondo */
+        background: #1631ff;
+        /* Colore del pallino */
+        cursor: pointer;
+        transition: transform 0.1s ease;
+
+    }
+    .cerchio-tratteggiato-container {
+        position: relative;
+        width: 95%;
+        aspect-ratio: 1 / 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+    .cerchio-tratteggiato {
+        width: 100%;
+        aspect-ratio: 1 / 1;        
+        border-radius: 70%; 
+        border: 5px dotted #000000;
+        box-sizing: border-box;
+    }
+}
+    .lancetta {
+        position: absolute;
+        top: 15%;              /* Distanza dal bordo superiore */
+        left: calc(50% - 3px); /* 50% meno metà dello spessore della lancetta (6px / 2) */
+        width: 6px;            /* Spessore della lancetta */
+        height: 35%;           /* Lunghezza della lancetta dal centro verso l'alto */
+        background-color: #000000;
+        border-radius: 4px;
+        
+        /* PROPRIETÀ CHIAVE PER LA ROTAZIONE DAL CENTRO */
+        transform-origin: bottom center; /* Fissa il perno di rotazione sulla base della lancetta */
+        transform: rotate(45deg);        /* Cambia i gradi per ruotarla */
+}
+.testo-velocita {
+    position: absolute;
+    bottom: 18%; /* Sposta il testo nella parte inferiore del cerchio */
+    left: 50%;
+    transform: translateX(-50%); /* Centra perfettamente il testo in orizzontale */
+    
+    font-family: sans-serif; /* Oppure "DMT" se vuoi usare la tua font */
+    font-size: clamp(8px, 1.1vh, 12px); /* Si adatta alla dimensione dello schermo */
+    color: #000000;
+    text-align: center;
+    line-height: 1.2;
+    pointer-events: none; /* Impedisce che il testo interferisca con i click */
+    z-index: 2; /* Mantiene il testo sopra lo sfondo del cerchio */
 }
 
+/* Stile per il numero sotto la scritta (il tag <strong>) */
+.testo-velocita strong {
+    display: block;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 2px;
+}
+    /* Contenitore principale del grafico */
+.campo {
+    position: relative;
+    overflow: hidden; /* Mantiene i paddle all'interno degli angoli arrotondati */
+}
+
+/* Linea a punti centrale */
+.linea-centrale {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 3px dotted #000000;
+}
+
+/* Stile base dei due rettangoli colorati (paddle) */
+.paddle {
+    position: absolute;
+    width: 8px;           /* Larghezza del rettangolo */
+    height: 25%;          /* Altezza del rettangolo relativa al riquadro */
+    border-radius: 4px;   /* Arrotondamento degli angoli per fare l'effetto capsula */
+    
+    /* Gestione dinamica della posizione verticale */
+    top: var(--pos-y, 50%); 
+    transform: translateY(-50%); /* Centra il paddle rispetto al punto Y indicato */
+    transition: top 0.1s ease-out; /* Rende fluido l'eventuale movimento */
+}
+
+/* Paddle Rosso ancorato a sinistra */
+.rosso {
+    left: 0;
+    background-color: var(--color-pl1); /* Usa il rosso definito in :root (#ff1618) */
+}
+
+/* Paddle Blu ancorato a destra */
+.blu {
+    right: 0;
+    background-color: var(--color-pl2); /* Usa il blu definito in :root (#2317ff) */
+}
+    
 .item-grande {
     flex: 0 0 calc((var(--col) * 2) + var(--gap));
     aspect-ratio: 1 / 1;
@@ -63,7 +241,12 @@ body {
 .item-lungo {
     flex: 0 0 calc((var(--col) * 2) + var(--gap));
     height: var(--col);
-    
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 8px;
+    box-sizing: border-box;
+
+
 }
 
 .pl1 {
@@ -74,7 +257,7 @@ body {
     background-color: var(--color-pl2);
 }
 
-.base{
+.base {
     background-color: #dadada;
 }
 
@@ -84,11 +267,11 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-variation-settings: 'wght' 400, 'ROTA' 0, 'SIZE' 0;
+    font-variation-settings: 'wght' 100, 'ROTA' 100, 'SIZE' 700;
     color: #ffffff;
     outline: none;
     border: none;
-    font-size: clamp(2vh, 18vh, 16vh);
+    font-size: 25vh;
 }
 
 #text-piccolo {
@@ -97,19 +280,35 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-variation-settings: 'wght' 350, 'ROTA' 0, 'SIZE' 0;
+    font-variation-settings: 'wght' 350, 'ROTA' 200, 'SIZE' 200;
     color: #ffffff;
     outline: none;
     border: none;
-    font-size: clamp(2vh, 10vh, 9vh);
+    font-size: clamp(1vh, 15vh, 20vh);
 }
 
 #text-alfabeto {
     font-family: "DMT";
     margin: 0;
-    text-align: center;
-    font-variation-settings: 'wght' 350, 'ROTA' 0, 'SIZE' 0;
+    margin-top: -5px;
+    text-align: left;
+    font-variation-settings: 'wght' 500, 'ROTA' 200, 'SIZE' 200;
     color: #000000;
-    font-size: clamp(10px, 2.4vh, 28px);
-    
+    font-size: clamp(3.5vh, 3.7vh, 15vh);
+    letter-spacing: -0.18em;
+    line-height: 1.18;
+
+}
+
+.text-DMT {
+    font-family: "DMT";
+    margin: 0;
+    margin-top: -5px;
+    margin-left: 25px;
+    text-align: left;
+    font-variation-settings: 'wght' 500, 'ROTA' 200, 'SIZE' 200;
+    color: #000000;
+    font-size: clamp(3.5vh, 5vh, 15vh);
+    letter-spacing: -0.18em;
+    line-height: 1.18;
 }

@@ -1,35 +1,90 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PINGs</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="quadrato-esterno">
         <div class="flex-container">
             <div class="item-grande pl1">
                 <p id="text-grande">1</p>
             </div>
-            <div class="item-grande pl2" >
+            <div class="item-grande pl2">
                 <p id="text-grande">2</p>
             </div>
-            <div class="item-piccolo base"></div>
+            <div class="item-piccolo base">
+                <div class="controlli-font">
+                    <label>
+                        Weight:
+                        <input type="range" id="slider-wght" min="100" max="900" value="500">
+                    </label>
+
+                    <label>
+                        Rotation:
+                        <input type="range" id="slider-rota" min="0" max="360" value="0">
+                    </label>
+
+                    <label>
+                        Size:
+                        <input type="range" id="slider-size" min="0" max="100" value="0">
+                    </label>
+                </div>
+            </div>
             <div class="item-piccolo pl1">
                 <p id="text-piccolo">D</p>
             </div>
-            <div class="item-piccolo base"></div>
+            <div class="item-piccolo base">
+                <div class="controlli-font2">
+                    <label>
+                        Weight:
+                        <input type="range" id="slider-wght" min="100" max="900" value="500">
+                    </label>
+
+                    <label>
+                        Rotation:
+                        <input type="range" id="slider-rota" min="0" max="360" value="0">
+                    </label>
+
+                    <label>
+                        Size:
+                        <input type="range" id="slider-size" min="0" max="100" value="0">
+                    </label>
+                </div>
+            </div>
             <div class="item-piccolo pl2">
                 <p id="text-piccolo">P</p>
             </div>
-            <div class="item-piccolo base"></div>
-            <div class="item-lungo base">
-                <p id="text-alfabeto">A B C D E F G H I J K L M<br>N O P Q R S T U V W X Y Z</p>
+            <div class="item-piccolo base campo">
+                <!-- Linea verticale tratteggiata centrale -->
+                <div class="linea-centrale"></div>
+
+                <!-- Bacchetta Rossa (Sinistra) -->
+                <div class="paddle rosso" style="--pos-y: 55%;"></div>
+
+                <!-- Bacchetta Blu (Destra) -->
+                <div class="paddle blu" style="--pos-y: 25%;"></div>
             </div>
-            <div class="item-piccolo base"></div>
+            <div class="item-lungo base">
+                <p id="text-alfabeto">A B C D E F G H I J K<br> L M N O P Q R S T U V <br>W X Y Z <br>1 2 3 4 5 6 7 8 9
+                    0</p>
+                <p class="text-DMT">D<br>M<br>T</p>
+            </div>
+            <div class="item-piccolo base">
+                <div class="cerchio-tratteggiato-container">
+                    <div class="cerchio-tratteggiato"></div>
+                    <div class="lancetta"></div>
+                    <span class="testo-velocita">velocità km/h<br><strong>67</strong></span>
+                </div>
+            </div>
+
         </div>
     </div>
 
 </body>
+
 </html>
