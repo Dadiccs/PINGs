@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PINGs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="quadrato-esterno">
+        
+        <!-- Secondo quadrato (Interno) -->
+        <div class="quadrato-interno">
+            
+            <!-- SCRITTA GOO / OAL: Scritta a mano direttamente nell'HTML -->
+            <div id="goal">
+
+                <div class="riga-goal">
+                <span class="lettera-goal">G</span>
+                <span class="lettera-goal">O</span>
+                <span class="lettera-goal">O</span>
+        </div>
+        <div class="riga-goal">
+                <span class="lettera-goal">O</span>
+                <span class="lettera-goal">A</span>
+                <span class="lettera-goal">L</span>
+            </div>
+
+            <!-- Terzo quadrato (Glifi) -->
+            <div class="quadrato-invisibile">
+                <span class="glifo glifo-1 glifo-animato" id="glifo-1">$</span>
+                <span class="glifo glifo-2 glifo-animato" id="glifo-2">?</span>
+                <span class="glifo glifo-3 glifo-animato" id="glifo-3">@</span>
+                <span class="glifo glifo-4 glifo-animato" id="glifo-4">&#x2206;</span>
+                <span class="glifo glifo-5 glifo-animato" id="glifo-5">%</span>
+            </div>
+            
+        </div> <!-- /quadrato-interno -->
+
+    </div>
+
+    <!-- SCRIPT 1: Animazione dei Glifi ($ ? @ ∆ %) -->
+    <script>
+        const glifi = document.querySelectorAll('.glifo-animato');
+        let tGlifi = 0;
+
+        function loopGlifi() {
+            tGlifi += 0.1;
+
+            glifi.forEach((glifo, index) => {
+                const offset = index * 0.8; 
+                const progress = (Math.sin(tGlifi + offset) + 1) / 2;
+
+                const wght = 100 + (progress * 800);
+                const rota = progress * 360;       
+                const size = progress * 100;       
+
+                glifo.style.fontVariationSettings = `'wght' ${wght}, 'ROTA' ${rota}, 'SIZE' ${size}`;
+            });
+
+            requestAnimationFrame(loopGlifi);
+        }
+
+        loopGlifi();
+    </script>
+
+    <!-- SCRIPT 2: Animazione in sequenza delle lettere G-O-O-O-A-L -->
+    <script>
+        // Seleziona direttamente i 6 span che abbiamo creato a mano nell'HTML
+        const lettereGoal = document.querySelectorAll('.lettera-goal');
+        let tGoal = 0;
+
+        function loopGoal() {
+            tGoal += 0.06;
+
+            lettereGoal.forEach((lettera, index) => {
+                // index fa muovere le lettere in sequenza (onda)
+                const offset = index * 0.4; 
+                const progress = (Math.sin(tGoal - offset) + 1) / 2;
+
+                const wght = 100 + (progress * 800);  
+                const rota = progress * 360;          
+                const size = 100 - (progress * 100); // Parte da 100 e scende a 0
+
+                lettera.style.fontVariationSettings = `'wght' ${wght}, 'ROTA' ${rota}, 'SIZE' ${size}`;
+            });
+
+            requestAnimationFrame(loopGoal);
+        }
+
+        loopGoal();
+    </script>
+
+</body>
+
+</html>

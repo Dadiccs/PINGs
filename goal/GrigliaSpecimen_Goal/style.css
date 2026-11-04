@@ -1,0 +1,162 @@
+@font-face {
+    font-family: "DMT";
+    src: url("fonts/DMTLLVarSupsi-[SIZE,ROTA,wght].woff2") format("woff2");
+}
+
+
+:root {
+    --gap: clamp(4px, 3vw, 14px);
+    --padding: clamp(4px, 3vw, 10px);
+    --col: calc((100% - (3 * var(--gap))) / 4);
+    --color-pl1: #ff1618;
+    --color-pl2: #2317ff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.quadrato-esterno {
+    width: 80vw;
+    max-width: 80vh;
+    aspect-ratio: 1 / 1;
+    background-color: #adadad;
+    padding: var(--padding);
+    box-sizing: border-box;
+    display: flex;
+    border-radius: 12px;
+}
+.quadrato-interno {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    box-sizing: border-box;
+    background-color: #c4c4c4;
+    border-radius: 8px;
+}
+.quadrato-invisibile {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    box-sizing: border-box;
+    background-color: #c4c4c400;
+    border-radius: 8px;
+}
+
+
+    
+.item-grande {
+    flex: 0 0 calc((var(--col) * 2) + var(--gap));
+    aspect-ratio: 1 / 1;
+
+
+
+}
+.glifo {
+    position: absolute; /* Posizionamento assoluto rispetto al contenitore */
+    font-family: "DMT";
+    transform: translate(-50%, -50%); /* Centra il glifo esattamente sulle coordinate indicate */
+    color:red;
+    margin: 0;
+    /* Applica le variabili CSS specifiche per la posizione e per il font */
+    top: var(--top, 10%);
+    left: var(--left, 10%);
+    font-size: var(--size, 24px);
+    font-variation-settings: 
+        'wght' var(--wght, 400), 
+        'ROTA' var(--rota, 0), 
+        'SIZE' var(--vsize, 0);
+}
+
+/* --- POSIZIONI E VARIABILI INDIVIDUALI --- */
+
+.glifo-1 {
+    --top: 12%;
+    --left: 20%;
+    --size: 160px;
+    --wght: 700;
+    --rota: 45;
+    --vsize: 10;
+}
+
+/* ? */
+.glifo-2 {
+    --top: 15%;
+    --left: 75%;
+    --size: 110px;
+    --wght: 600;
+    --rota: 150;
+    --vsize: 700;
+}
+
+/* @ */
+.glifo-3 {
+    --top: 50%;
+    --left: 65%;
+    --size: 80px;
+    --wght: 400;
+    --rota: 20;
+    --vsize: 100;
+}
+
+/* glifo triangolo */
+.glifo-4 {
+    --top: 80%;
+    --left: 20%;
+    --size: 200px;
+    --wght: 500;
+    --rota: 90;
+    --vsize: 50;
+}
+
+/* % */
+.glifo-5 {
+    --top: 75%;
+    --left: 85%;
+    --size: 160px;
+    --wght: 700;
+    --rota: 300;
+    --vsize: 100;
+}
+.lettera-goal {
+    display: inline-block;
+    font-family: "DMT";
+}
+.riga-goal {
+    display: flex; 
+    justify-content: center;
+    line-height: 1;
+}
+#goal {
+    font-family: "DMT";
+    margin: 0;
+    margin-top: 7%;
+    margin-left: 5%;
+    display: flex;
+    flex-direction: column; /* <--- FONDAMENTALE: forza l'andata a capo (GOO sopra, OAL sotto) */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-variation-settings: 'wght' 600, 'ROTA' 200, 'SIZE' 700;
+    color: #000000;
+    outline: none;
+    border: none;
+    font-size: 32vh;
+    line-height: 0.85;
+}
+
+
+
+
+
