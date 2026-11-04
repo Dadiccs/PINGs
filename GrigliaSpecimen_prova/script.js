@@ -12,19 +12,35 @@ const gruppiFont = [
     wght: document.getElementById('slider-wght'),
     rota: document.getElementById('slider-rota'),
     size: document.getElementById('slider-size'),
+    wghtOut: document.querySelectorAll('.pl1 .wght-num'),
   },
   {
     targets: document.querySelectorAll('.pl2 p'),
     wght: document.getElementById('slider-wght-2'),
     rota: document.getElementById('slider-rota-2'),
     size: document.getElementById('slider-size-2'),
+    wghtOut: document.querySelectorAll('.pl2 .wght-num'),
   },
 ];
+
+// --- DOPPIO SLIDER VERTICALE (solo visivo): S = size, R = rotation del Player 1 ---
+const vsSize = document.getElementById('vs-size');
+const vsRota = document.getElementById('vs-rota');
+
+function aggiornaSliderVerticali() {
+  const g = gruppiFont[0];
+  [[vsSize, g.size], [vsRota, g.rota]].forEach(([col, s]) => {
+    const t = (s.value - s.min) / (s.max - s.min);
+    col.querySelector('.slider-pomello').style.setProperty('--t', t);
+    col.querySelector('.slider-valore').textContent = Math.round(s.value);
+  });
+}
 
 function aggiornaFont(g) {
   const v = `'wght' ${g.wght.value}, 'ROTA' ${g.rota.value}, 'SIZE' ${g.size.value}`;
   g.targets.forEach(el => { el.style.fontVariationSettings = v; });
-
+  g.wghtOut.forEach(el => { el.textContent = Math.round(g.wght.value); });
+  if (g === gruppiFont[0]) aggiornaSliderVerticali();
 }
 
 gruppiFont.forEach(g => {
@@ -81,6 +97,9 @@ window.aggiornaGriglia = function (players) {
 let kmhSmooth = 0;
 let angoloSmooth = 0;
 
+const pallinaXEl = document.getElementById('pallina-x');
+const pallinaYEl = document.getElementById('pallina-y');
+
 window.aggiornaPallina = function ({ x, y, vx, vy }) {
   // Velocità
   const kmh = Math.hypot(vx, vy) * KMH_PER_PX_FRAME;
@@ -104,6 +123,10 @@ window.aggiornaPallina = function ({ x, y, vx, vy }) {
   // SIZE da velocità (stesso valore per entrambi)
   setSliderNorm(0, 'size', kmhC / KMH_MAX);
   setSliderNorm(1, 'size', kmhC / KMH_MAX);
+
+  // Coordinate sulla matrice 32x32 (0-31)
+  pallinaXEl.textContent = Math.min(31, Math.max(0, Math.floor(x * 32)));
+  pallinaYEl.textContent = Math.min(31, Math.max(0, Math.floor(y * 32)));
 
   // Scia
   trail.push({ x, y });
@@ -151,47 +174,132 @@ function disegnaCampo() {
   ctxCampo.fill();
 }
 
-// --- FUNZIONE PER AGGIORNARE I FILETTI TECNICI E LA BOUNDING BOX ---
-function aggiornaFilettiTecnici() {
-    const itemsGrandi = document.querySelectorAll('.item-grande');
+// =====================================================
+//  GLIFO GRANDE: appoggiato SEMPRE sulla baseline e con
+//  la cima alla linea Cap Height, a qualsiasi dimensione
+// =====================================================
 
-    itemsGrandi.forEach(item => {
-        const wrapper = item.querySelector('.technical-wrapper');
-        const textEl = item.querySelector('.text-grande');
-        const widthValEl = item.querySelector('.bbox-width-val');
-        if (!wrapper || !textEl) return;
+// Se conosci le metriche esatte puoi forzarle, es. 1420 / 2000 (capHeight / unitsPerEm).
+// Con null il rapporto viene misurato dal font caricato.
+const CAP_RATIO_MANUALE = null;
+let capRatio = CAP_RATIO_MANUALE || 0.71;   // 0.71 = valore di riserva
 
-        // Calcola le coordinate reali del testo rispetto al riquadro
-        const wrapperRect = wrapper.getBoundingClientRect();
-        const textRect = textEl.getBoundingClientRect();
-
-        const relLeft = textRect.left - wrapperRect.left;
-        const relRight = textRect.right - wrapperRect.left;
-
-        // Aggiorna le variabili CSS dei filetti verticali
-        wrapper.style.setProperty('--box-left', `${relLeft}px`);
-        wrapper.style.setProperty('--box-right', `${relRight}px`);
-
-        // Aggiorna dinamicamente il valore numerico della larghezza della bounding box
-        if (widthValEl) {
-            widthValEl.textContent = Math.round(textRect.width);
-        }
-    });
+function calibraCapHeight() {
+  if (CAP_RATIO_MANUALE) return;
+  try {
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = '1000px DMT';
+    const m = ctx.measureText('H');
+    if (m.actualBoundingBoxAscent > 0) capRatio = m.actualBoundingBoxAscent / 1000;
+  } catch (e) { /* si usa il valore di riserva */ }
 }
 
-// Chiamate automatiche nei momenti chiave
-window.addEventListener('DOMContentLoaded', aggiornaFilettiTecnici);
-window.addEventListener('resize', aggiornaFilettiTecnici);
+// Aggiorna i filetti verticali e la larghezza della bounding box
+function aggiornaFilettiTecnici() {
+  document.querySelectorAll('.item-grande').forEach(item => {
+    const wrapper = item.querySelector('.technical-wrapper');
+    const textEl = item.querySelector('.text-grande');
+    const widthValEl = item.querySelector('.bbox-width-val');
+    if (!wrapper || !textEl) return;
 
+    const wr = wrapper.getBoundingClientRect();
+    const tr = textEl.getBoundingClientRect();
+
+    wrapper.style.setProperty('--box-left', `${tr.left - wr.left}px`);
+    wrapper.style.setProperty('--box-right', `${tr.right - wr.left}px`);
+    
+    // Moltiplica la larghezza per il rapporto esatto e arrotonda per eccesso verso l'alto
+    if (widthValEl) {
+      const trWidth = tr.width * 5.86; // 1em = 5.867768595px a 1000px di font-size
+      widthValEl.textContent = Math.floor(trWidth);
+    }
+  });
+}
+
+// Dimensiona e posiziona il glifo in base alle linee reali
+function adattaGlifi() {
+  document.querySelectorAll('.item-grande').forEach(item => {
+    const wrapper = item.querySelector('.technical-wrapper');
+    const p = item.querySelector('.text-grande');
+    if (!wrapper || !p) return;
+
+    const linee = wrapper.querySelectorAll('.filetto-orizzontale');
+    const lineaCap = linee[1];    // Cap Height
+    const lineaBase = linee[3];   // Baseline
+    if (!lineaCap || !lineaBase) return;
+
+    const wr = wrapper.getBoundingClientRect();
+    const capY = lineaCap.getBoundingClientRect().top - wr.top;
+    const baseY = lineaBase.getBoundingClientRect().top - wr.top;
+
+    // 1) font-size: l'altezza delle maiuscole deve riempire lo spazio Cap -> Baseline
+    p.style.fontSize = ((baseY - capY) / capRatio) + 'px';
+
+    // 1b) azzera qualsiasi translateY residuo del CSS: il posizionamento verticale lo fa solo `top`
+    p.style.transform = 'translateX(-50%)';
+
+    // 2) marcatore invisibile che si siede sulla baseline reale del testo
+    let marker = p.querySelector('.baseline-marker');
+    if (!marker) {
+      marker = document.createElement('span');
+      marker.className = 'baseline-marker';
+      marker.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline;';
+      p.appendChild(marker);
+    }
+
+    // 3) sposta il <p> in modo che la baseline coincida con la linea
+    p.style.top = '0px';
+    const offset = marker.getBoundingClientRect().top - p.getBoundingClientRect().top;
+    p.style.top = (baseY - offset) + 'px';
+  });
+
+  aggiornaFilettiTecnici();
+}
+
+// Ricalcolo quando cambia la dimensione dei riquadri (resize, rotazione, zoom...)
+const roGlifi = new ResizeObserver(adattaGlifi);
+document.querySelectorAll('.item-grande .technical-wrapper').forEach(w => roGlifi.observe(w));
+window.addEventListener('resize', adattaGlifi);
+window.addEventListener('DOMContentLoaded', adattaGlifi);
+
+// Quando gli slider cambiano il font, aggiorna solo larghezza e filetti verticali
 const vecchiaFunzioneAggiornaFont = window.aggiornaFont || aggiornaFont;
-window.aggiornaFont = function(g) {
-    vecchiaFunzioneAggiornaFont(g); 
-    requestAnimationFrame(aggiornaFilettiTecnici); 
+window.aggiornaFont = function (g) {
+  vecchiaFunzioneAggiornaFont(g);
+  requestAnimationFrame(aggiornaFilettiTecnici);
 };
 
-// Aspetta che il font personalizzato sia caricato al 100% prima di calcolare i filetti
+// Appena il font DMT è caricato: misura il cap-height e ricalcola
 if (document.fonts) {
-    document.fonts.ready.then(() => {
-        setTimeout(aggiornaFilettiTecnici, 50);
-    });
+  document.fonts.load('1000px DMT', 'H').catch(() => { }).then(() => {
+    calibraCapHeight();
+    adattaGlifi();
+  });
 }
+
+// --- CONTACHILOMETRI: pallini e numeri sull'arco (0 in basso a sinistra) ---
+(function costruisciQuadrante() {
+  const cont = document.querySelector('.cerchio-tratteggiato-container');
+  const R_DOT = 44, R_NUM = 35;           // raggi in % del contenitore
+  const pos = (v, r) => {
+    const a = (-135 + (v / KMH_MAX) * 230) * Math.PI / 180;
+    return [50 + r * Math.sin(a), 50 - r * Math.cos(a)];
+  };
+  for (let v = 0; v <= KMH_MAX; v += 5) {
+    const [x, y] = pos(v, R_DOT);
+    const d = document.createElement('div');
+    d.className = 'q-dot';
+    d.style.left = x + '%'; d.style.top = y + '%';
+    cont.appendChild(d);
+  }
+  for (let v = 0; v <= KMH_MAX; v += 10) {   // il 100 resta sotto al numero grande
+    const [x, y] = pos(v, R_NUM);
+    const n = document.createElement('div');
+    n.className = 'q-num';
+    n.textContent = v;
+    n.style.left = x + '%'; n.style.top = y + '%';
+    cont.appendChild(n);
+  }
+})();
+
+aggiornaSliderVerticali();

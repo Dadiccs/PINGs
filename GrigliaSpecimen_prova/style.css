@@ -191,15 +191,6 @@ body {
     overflow: hidden; 
 }
 
-.linea-centrale {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 3px dotted #000000;
-}
-
 .paddle {
     position: absolute;
     width: 8px;           
@@ -252,7 +243,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-variation-settings: 'wght' 100, 'ROTA' 100, 'SIZE' 700;
+    font-variation-settings: 'wght' 450, 'ROTA' 100, 'SIZE' 0;
     color: #ffffff;
     outline: none;
     border: none;
@@ -265,7 +256,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-variation-settings: 'wght' 350, 'ROTA' 200, 'SIZE' 200;
+    font-variation-settings: 'wght' 350, 'ROTA' 0, 'SIZE' 0;
     color: #ffffff;
     outline: none;
     border: none;
@@ -277,7 +268,7 @@ body {
     margin: 0;
     margin-top: -5px;
     text-align: left;
-    font-variation-settings: 'wght' 500, 'ROTA' 200, 'SIZE' 200;
+    font-variation-settings: 'wght' 500, 'ROTA' 0, 'SIZE' 0;
     color: #000000;
     font-size: clamp(3.5vh, 3.7vh, 15vh);
     letter-spacing: -0.18em;
@@ -394,16 +385,13 @@ body {
 
 .item-grande .text-grande {
     position: absolute;
-    /* Ancoriamo la base del testo esattamente sulla percentuale della Baseline */
-    top: 83.5%;
+    top: 0;                      /* calcolato da script.js */
     left: 50%;
-    transform: translateX(-50%) translateY(-100%);
+    transform: translateX(-50%);
     margin: 0;
     line-height: 1;
-    
-    /* La dimensione si adatta in modo fluido all'altezza del box, 
-       coprendo esattamente lo spazio tra Cap Height e Baseline */
-    font-size: 27.2vh; /* Oppure usa un valore in vh proporzionato, es. 18vh */
+    white-space: nowrap;
+    font-size: 15vh;             /* valore provvisorio: lo calcola script.js */
 }
 
 /* Stile base dei filetti */
@@ -491,8 +479,8 @@ body {
 /* Filetti verticali dinamici */
 .filetto.verticale {
     position: absolute;
-    top: 25px;
-    bottom: 35px;
+    top: 40px;
+    bottom: 20px;
     width: 1px;
     border-left: 1px dashed rgba(255, 255, 255, 0.5);
     pointer-events: none;
@@ -508,7 +496,6 @@ body {
     font-family: sans-serif;
     font-size: 8.5px;
     color: #ffffff;
-    background: rgba(0, 0, 0, 0.25);
     padding: 1px 6px;
     border-radius: 3px;
     z-index: 3;
@@ -520,4 +507,157 @@ body {
     border-top-style: solid;
     border-top-width: 1px;
     border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* L'ultima linea ha l'etichetta SOPRA, così non esce dal riquadro */
+.filetto-orizzontale.filetto-ultimo .etichetta {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin: 0 0 1px 0;
+}
+
+.coord-pallina {
+    left: auto;
+    right: 6px;
+    transform: none;
+    color: #000;                      /* il bianco non si legge sul grigio chiaro */
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.wght-val {
+    top: 6px;
+    bottom: auto;
+    left: 12px;
+    right: auto;
+    transform: none;
+}
+
+.campo {
+    background-image:
+        linear-gradient(to right, rgba(0, 0, 0, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+    background-size: 12.5% 12.5%;   /* 8x8 celle */
+}
+
+/* Typo Descender: sempre a 30px dal fondo, sopra al valore w:/wght: */
+.filetto-orizzontale.filetto-ultimo {
+    top: calc(100% - 30px) !important;   /* !important: batte lo style="top:97%" inline */
+}
+
+/* ===== LAYOUT A GRIGLIA 4 colonne ===== */
+.flex-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: calc(2 * var(--col) + var(--gap)) var(--col) var(--col);
+}
+.flex-container > * { min-width: 0; min-height: 0; aspect-ratio: auto; }
+.item-grande { grid-column: span 2; }
+.item-lungo  { grid-column: span 2; height: auto; }
+
+/* Colonna verticale a destra (2 righe) */
+.item-lungo-verticale {
+    grid-column: 4;
+    grid-row: span 2;
+    border-radius: 8px;
+    display: flex;
+    padding: var(--padding);
+    box-sizing: border-box;
+    gap: var(--gap);
+}
+
+.slider-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.slider-pista {
+    flex: 1;
+    width: 100%;
+    background: #adadad;
+    border-radius: 999px;
+    position: relative;
+}
+.slider-corsa {                       /* area in cui scorre il pomello */
+    position: absolute;
+    inset: var(--padding);
+}
+.slider-pomello {
+    position: absolute;
+    left: 0;
+    width: 100%;                      /* diametro = larghezza della pista */
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: #fff;
+    bottom: calc(var(--t, 0) * 100%);
+    transform: translateY(calc(var(--t, 0) * 100%));
+}
+/* stesso stile dei bbox-orizzontale-valore, in nero */
+.slider-testo {
+    font-family: sans-serif;
+    font-size: 8.5px;
+    color: #000;
+    padding: 1px 6px;
+    border-radius: 3px;
+    line-height: normal;
+}
+
+.contachilometri { position: relative; }
+
+.cerchio-tratteggiato { display: none; }              /* via il cerchio tratteggiato */
+.cerchio-tratteggiato-container { container-type: inline-size; }
+
+.q-dot {
+    position: absolute;
+    width: 4.5cqw;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+}
+.q-num {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-family: sans-serif;
+    font-size: 5cqw;
+    font-weight: 600;
+    color: #000;
+    line-height: 1;
+}
+
+/* Lancetta spessa a pillola */
+.lancetta {
+    top: 20%;
+    height: 30%;
+    width: 5%;
+    left: 45.5%;
+    border-radius: 999px;
+    z-index: 1;
+}
+
+/* Numero grande in basso a destra, con il font DMT */
+.testo-velocita {
+    left: auto;
+    right: 10%;
+    bottom: 3%;
+    transform: none;
+    font-family: "DMT";
+    font-variation-settings: 'wght' 450, 'ROTA' 0, 'SIZE' 50;
+    font-size: 34cqw;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+}
+.testo-velocita strong {
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+}
+
+.kmh-label {
+    left: 6px;
+    transform: none;
+    color: #000;
 }
