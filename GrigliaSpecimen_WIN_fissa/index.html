@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PINGs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="quadrato-esterno">
+        <div class="flex-container">
+            <div class="item-grande pl1">
+                <p id="text-grande">1</p>
+            </div>
+            <div class="item-grande pl2">
+                <p id="text-grande">2</p>
+            </div>
+            <div class="item-lungo base">
+                <!-- SOLO il nastro: il testo statico e' stato tolto,
+                     altrimenti spingeva il nastro fuori dall'item -->
+                <div class="nastro-wrapper">
+                    <div class="nastro-traccia">
+                        <!-- Le due copie DEVONO essere identiche per il loop senza salti -->
+                        <span class="frase">PLAYER <span class="dadi-rosso">DADI</span> WIN &nbsp;&nbsp;&#8226;&nbsp;&nbsp;</span>
+                        <span class="frase" aria-hidden="true">PLAYER <span class="dadi-rosso">DADI</span> WIN &nbsp;&nbsp;&#8226;&nbsp;&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

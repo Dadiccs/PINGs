@@ -1,0 +1,115 @@
+@font-face {
+    font-family: "DMT";
+    src: url("fonts/DMTLLVarSupsi-[SIZE,ROTA,wght].woff2") format("woff2");
+}
+
+:root {
+    --gap: clamp(6px, 1vw, 16px);
+    --padding: clamp(8px, 1vw, 20px);
+    --col: calc((100% - (3 * var(--gap))) / 4);
+    --color-pl1: #ff1618;
+    --color-pl2: #2317ff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.quadrato-esterno {
+    width: 80vw;
+    max-width: 80vh;
+    aspect-ratio: 1 / 1;
+    background-color: #adadad;
+    padding: var(--padding);
+    box-sizing: border-box;
+    display: flex;
+    border-radius: 12px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: var(--gap);
+    width: 100%;
+    height: 100%;
+}
+
+.item-grande {
+    flex: 0 0 calc((var(--col) * 2) + var(--gap));
+    aspect-ratio: 1 / 1;
+    height: auto;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Altezza corretta: prima era 50% lordo e sbordava dal quadrato di mezzo gap */
+.item-lungo {
+    flex: 0 0 100%;
+    height: calc(50% - (var(--gap) / 2));
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;   /* sicurezza: niente puo' uscire dall'item */
+}
+
+.pl1 { background-color: var(--color-pl1); }
+.pl2 { background-color: var(--color-pl2); }
+.base { background-color: #dadada; }
+
+#text-grande {
+    font-family: "DMT";
+    margin: 0;
+    text-align: center;
+    font-variation-settings: 'wght' 500, 'ROTA' 100, 'SIZE' 0;
+    color: #ffffff;
+    font-size: 25vh;
+}
+
+/* 1. Il wrapper riempie tutta l'altezza dell'item e taglia cio' che esce */
+.nastro-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+/* 2. La traccia che scorre: le frasi NON devono restringersi */
+.nastro-traccia {
+    display: flex;
+    flex-shrink: 0;
+    white-space: nowrap;
+    will-change: transform;
+    animation: scorriNastro 10s linear infinite;
+}
+
+/* 3. Testo del nastro */
+.frase {
+    font-family: "DMT";
+    display: inline-block;
+    flex-shrink: 0;      /* larghezza fissa: fondamentale per il -50% */
+    white-space: nowrap;
+    font-variation-settings: 'wght' 400, 'ROTA' 100, 'SIZE' 700;
+    color: #000000;
+    font-size: 30cqh;     /* prima era 20vh: troppo alto per l'item */
+    
+}
+
+.dadi-rosso {
+    color: var(--color-pl1, #ff1618);
+}
+
+/* 4. Loop: -50% perche' la traccia contiene ESATTAMENTE 2 copie identiche */
+@keyframes scorriNastro {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
