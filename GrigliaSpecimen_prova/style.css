@@ -1,0 +1,663 @@
+@font-face {
+    font-family: "DMT";
+    src: url("fonts/DMTLLVarSupsi-[SIZE,ROTA,wght].woff2") format("woff2");
+}
+
+:root {
+    --gap: clamp(4px, 0.7vw, 11px);
+    --padding: clamp(5px, 0.7vw, 11px);
+    --col: calc((100% - (3 * var(--gap))) / 4);
+    --color-pl1: #ff1618;
+    --color-pl2: #2317ff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    position: relative;
+}
+
+.quadrato-esterno {
+    width: 80vw;
+    max-width: 80vh;
+    aspect-ratio: 1 / 1;
+    background-color: #adadad;
+    padding: var(--padding);
+    box-sizing: border-box;
+    display: flex;
+    border-radius: 12px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    width: 100%;
+    height: 100%;
+}
+
+.item-piccolo,
+.item-grande,
+.item-lungo {
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item-piccolo {
+    flex: 0 0 var(--col);
+    aspect-ratio: 1 / 1;
+}
+
+.controlli-font {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #000000;
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+.controlli-font2 {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #000000;
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+.controlli-font label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.controlli-font2 label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.controlli-font input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: #ff1618;
+    outline: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.controlli-font input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff1618;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.controlli-font2 input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: #161aff;
+    outline: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.controlli-font2 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1631ff;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.cerchio-tratteggiato-container {
+    position: relative;
+    width: 95%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cerchio-tratteggiato {
+    width: 100%;
+    aspect-ratio: 1 / 1;        
+    border-radius: 70%; 
+    border: 5px dotted #000000;
+    box-sizing: border-box;
+}
+
+.lancetta {
+    position: absolute;
+    top: 15%;              
+    left: calc(50% - 3px); 
+    width: 6px;            
+    height: 35%;           
+    background-color: #000000;
+    border-radius: 4px;
+    transform-origin: bottom center; 
+    transform: rotate(45deg);        
+}
+
+.testo-velocita {
+    position: absolute;
+    bottom: 18%; 
+    left: 50%;
+    transform: translateX(-50%); 
+    font-family: sans-serif; 
+    font-size: clamp(8px, 1.1vh, 12px); 
+    color: #000000;
+    text-align: center;
+    line-height: 1.2;
+    pointer-events: none; 
+    z-index: 2; 
+}
+
+.testo-velocita strong {
+    display: block;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+.campo {
+    position: relative;
+    overflow: hidden; 
+}
+
+.paddle {
+    position: absolute;
+    width: 8px;           
+    height: 25%;          
+    border-radius: 4px;   
+    top: var(--pos-y, 50%); 
+    transform: translateY(-50%); 
+    transition: top 0.1s ease-out; 
+}
+
+.rosso {
+    left: 0;
+    background-color: var(--color-pl1); 
+}
+
+.blu {
+    right: 0;
+    background-color: var(--color-pl2); 
+}
+    
+.item-grande {
+    flex: 0 0 calc((var(--col) * 2) + var(--gap));
+    aspect-ratio: 1 / 1;
+}
+
+.item-lungo {
+    flex: 0 0 calc((var(--col) * 2) + var(--gap));
+    height: var(--col);
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.pl1 {
+    background-color: var(--color-pl1);
+}
+
+.pl2 {
+    background-color: var(--color-pl2);
+}
+
+.base {
+    background-color: #dadada;
+}
+
+.text-grande {
+    font-family: "DMT";
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-variation-settings: 'wght' 450, 'ROTA' 100, 'SIZE' 0;
+    color: #ffffff;
+    outline: none;
+    border: none;
+    font-size: 28vh;
+}
+
+.text-piccolo {
+    font-family: "DMT";
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-variation-settings: 'wght' 350, 'ROTA' 0, 'SIZE' 0;
+    color: #ffffff;
+    outline: none;
+    border: none;
+    font-size: clamp(1vh, 15vh, 20vh);
+}
+
+#text-alfabeto {
+    font-family: "DMT";
+    margin: 0;
+    margin-top: -5px;
+    text-align: left;
+    font-variation-settings: 'wght' 500, 'ROTA' 0, 'SIZE' 0;
+    color: #000000;
+    font-size: clamp(3.5vh, 3.7vh, 15vh);
+    letter-spacing: -0.18em;
+    line-height: 1.18;
+}
+
+.text-DMT {
+    font-family: "DMT";
+    margin: 0;
+    margin-top: -5px;
+    margin-left: 25px;
+    text-align: left;
+    font-variation-settings: 'wght' 500, 'ROTA' 200, 'SIZE' 200;
+    color: #000000;
+    font-size: clamp(3.5vh, 5vh, 15vh);
+    letter-spacing: -0.18em;
+    line-height: 1.18;
+}
+
+/* Stile modale nascosta (attivata premendo S) */
+.settings-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #ffffff;
+    font-family: sans-serif;
+}
+
+.settings-modal.active {
+    display: flex;
+}
+
+.settings-content {
+    background: #222;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.settings-close-hint {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #aaa;
+}
+
+/* ---- Tracking nel pannello impostazioni ---- */
+.settings-content { max-height: 92vh; overflow-y: auto; }
+
+.settings-modal #controls-panel {
+    background: #2a2a2a; padding: 12px 20px; border-radius: 8px; margin-top: 15px;
+    display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
+    justify-content: center; border: 1px solid #444;
+}
+.settings-modal .control-group { display: flex; flex-direction: column; font-size: 0.85rem; }
+.settings-modal .control-group input[type="range"] { cursor: pointer; }
+.settings-modal .color-slot { display: flex; align-items: center; gap: 10px; }
+.settings-modal .color-slot__actions button,
+.settings-modal #detect-matrix {
+    background: #5096ff; border: none; color: white; padding: 5px 10px;
+    border-radius: 4px; cursor: pointer;
+}
+.settings-modal .color-slot__actions button:hover,
+.settings-modal #detect-matrix:hover { background: #357ae8; }
+.settings-modal #color-slots-container { display: flex; gap: 15px; }
+
+.settings-modal #container-video { position: relative; margin-top: 15px; }
+.settings-modal #canvas {
+    width: 640px; max-width: 100%; height: auto;
+    border: 2px solid #5096ff; border-radius: 8px; cursor: crosshair;
+}
+.settings-modal #canvas.is-picking { border-color: #FFD700; }
+.settings-modal #infos { text-align: center; font-size: 1.1rem; margin-top: 10px; }
+.settings-modal #status { color: #ff5050; font-weight: bold; }
+.settings-modal #coords { font-size: 0.95rem; color: #aaa; margin-top: 4px; }
+.settings-modal #pick-hint { margin-top: 8px; color: #FFD700; font-weight: bold; font-size: 0.9rem; }
+
+
+/* ---- Traccia della pallina nel campo ---- */
+.traccia-pallina {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+
+
+
+/* ---- Stile per filetti ---- */
+/* Contenitore tecnico per i filetti attorno al testo */
+.item-grande {
+    position: relative; /* Fonde il contesto di posizione per i figli assoluti */
+}
+
+.technical-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Spinge tutto verso la baseline in basso */
+    align-items: center;
+    box-sizing: border-box;
+    /* Diamo un padding che simula lo spazio superiore e inferiore desiderato */
+    padding-bottom: calc(301.621px * 0.4); /* Regola questo padding in base alla baseline */
+}
+
+.item-grande .text-grande {
+    position: absolute;
+    top: 0;                      /* calcolato da script.js */
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
+    font-size: 15vh;             /* valore provvisorio: lo calcola script.js */
+}
+
+/* Stile base dei filetti */
+.filetto {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1; /* Sotto o sopra il testo a seconda delle preferenze */
+}
+
+/* Filetti verticali (variabili) */
+.filetto.verticale {
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    border-left: 1px dashed rgba(255, 255, 255, 0.6);
+    /* Utilizzeremo variabili CSS calcolate da JS per left e right/width */
+    left: var(--box-left, 0px);
+}
+
+.filetto.verticale.destro {
+    left: var(--box-right, 0px);
+}
+
+/* Filetti orizzontali (metriche fisse/proporzionali) */
+.filetto.orizzontale {
+    left: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.6);
+    top: var(--box-top, 0px);
+}
+
+.filetto.orizzontale.inferiore {
+    top: var(--box-bottom, 0px);
+}
+
+.filetto.orizzontale.baseline {
+    top: var(--box-baseline, 50%);
+    border-top-style: solid; /* Esempio per evidenziare la baseline */
+}
+
+
+.item-grande {
+    position: relative;
+    overflow: hidden;
+}
+
+.technical-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Stile filetti orizzontali basati sui tuoi offset */
+.filetto-orizzontale {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: var(--offset-top);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.filetto-orizzontale .linea {
+    width: 100%;
+    height: 1px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.6);
+}
+
+/* Etichetta: Titolo a sinistra, Valore a destra */
+.filetto-orizzontale .etichetta {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 7.5px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 1px;
+    letter-spacing: -0.2px;
+}
+
+/* Filetti verticali dinamici */
+.filetto.verticale {
+    position: absolute;
+    top: 40px;
+    bottom: 20px;
+    width: 1px;
+    border-left: 1px dashed rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Valore della Bounding Box orizzontale in basso al centro */
+.bbox-orizzontale-valore {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: sans-serif;
+    font-size: 8.5px;
+    color: #ffffff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Linea della baseline continua (senza trattini) */
+.filetto-orizzontale .linea.linea-continua {
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* L'ultima linea ha l'etichetta SOPRA, così non esce dal riquadro */
+.filetto-orizzontale.filetto-ultimo .etichetta {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin: 0 0 1px 0;
+}
+
+.coord-pallina {
+    left: auto;
+    right: 6px;
+    transform: none;
+    color: #000;                      /* il bianco non si legge sul grigio chiaro */
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.wght-val {
+    top: 6px;
+    bottom: auto;
+    left: 12px;
+    right: auto;
+    transform: none;
+}
+
+.campo {
+    background-image:
+        linear-gradient(to right, rgba(0, 0, 0, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+    background-size: 12.5% 12.5%;   /* 8x8 celle */
+}
+
+/* Typo Descender: sempre a 30px dal fondo, sopra al valore w:/wght: */
+.filetto-orizzontale.filetto-ultimo {
+    top: calc(100% - 30px) !important;   /* !important: batte lo style="top:97%" inline */
+}
+
+/* ===== LAYOUT A GRIGLIA 4 colonne ===== */
+.flex-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: calc(2 * var(--col) + var(--gap)) var(--col) var(--col);
+}
+.flex-container > * { min-width: 0; min-height: 0; aspect-ratio: auto; }
+.item-grande { grid-column: span 2; }
+.item-lungo  { grid-column: span 2; height: auto; }
+
+/* Colonna verticale a destra (2 righe) */
+.item-lungo-verticale {
+    grid-column: 4;
+    grid-row: span 2;
+    border-radius: 8px;
+    display: flex;
+    padding: var(--padding);
+    box-sizing: border-box;
+    gap: var(--gap);
+}
+
+.slider-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.slider-pista {
+    flex: 1;
+    width: 100%;
+    background: #adadad;
+    border-radius: 999px;
+    position: relative;
+}
+.slider-corsa {                       /* area in cui scorre il pomello */
+    position: absolute;
+    inset: var(--padding);
+}
+.slider-pomello {
+    position: absolute;
+    left: 0;
+    width: 100%;                      /* diametro = larghezza della pista */
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: #fff;
+    bottom: calc(var(--t, 0) * 100%);
+    transform: translateY(calc(var(--t, 0) * 100%));
+}
+/* stesso stile dei bbox-orizzontale-valore, in nero */
+.slider-testo {
+    font-family: sans-serif;
+    font-size: 8.5px;
+    color: #000;
+    padding: 1px 6px;
+    border-radius: 3px;
+    line-height: normal;
+}
+
+.contachilometri { position: relative; }
+
+.cerchio-tratteggiato { display: none; }              /* via il cerchio tratteggiato */
+.cerchio-tratteggiato-container { container-type: inline-size; }
+
+.q-dot {
+    position: absolute;
+    width: 4.5cqw;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+}
+.q-num {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-family: sans-serif;
+    font-size: 5cqw;
+    font-weight: 600;
+    color: #000;
+    line-height: 1;
+}
+
+/* Lancetta spessa a pillola */
+.lancetta {
+    top: 20%;
+    height: 30%;
+    width: 5%;
+    left: 45.5%;
+    border-radius: 999px;
+    z-index: 1;
+}
+
+/* Numero grande in basso a destra, con il font DMT */
+.testo-velocita {
+    left: auto;
+    right: 10%;
+    bottom: 3%;
+    transform: none;
+    font-family: "DMT";
+    font-variation-settings: 'wght' 450, 'ROTA' 0, 'SIZE' 50;
+    font-size: 34cqw;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+}
+.testo-velocita strong {
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+}
+
+.kmh-label {
+    left: 6px;
+    transform: none;
+    color: #000;
+}
