@@ -210,7 +210,7 @@ function aggiornaFilettiTecnici() {
     
     // Moltiplica la larghezza per il rapporto esatto e arrotonda per eccesso verso l'alto
     if (widthValEl) {
-      const trWidth = tr.width * 5.86; // 1em = 5.867768595px a 1000px di font-size
+      const trWidth = tr.width * 6.501; //* 5.86 Sul 27''
       widthValEl.textContent = Math.floor(trWidth);
     }
   });
