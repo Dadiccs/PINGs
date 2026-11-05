@@ -13,6 +13,7 @@ final boolean COUNT_WALL_BOUNCES = false; // true = contano anche i muri, false 
 final int MIDLINE_LEVEL = 60;       // luminosità (grigio) della linea di metà campo
 final int CALIBRATION_LEVEL = 150; // intensità (R e B) della cornice magenta usata per rilevare la matrice
 
+
 Serial serial;
 byte[] buffer;
 PGraphics led;
@@ -24,6 +25,7 @@ float ballX, ballY;
 float spd = SPEED_STEPS[0];
 int bounceCount = 0;
 float speedX, speedY;
+int score1 = 0, score2 = 0;
 
 boolean isCalibrating = false;
 
@@ -165,6 +167,8 @@ void draw() {
   // Locale.US per avere sempre il punto decimale
   ws.sendMessage(String.format(java.util.Locale.US, "B:%.4f,%.4f,%.4f,%.4f",
     ballX / TOTAL_WIDTH, ballY / TOTAL_HEIGHT, speedX, speedY));
+
+  ws.sendMessage("S:" + score1 + "," + score2);  
 
   // --- DISEGNO MATRICE ---
   led.beginDraw();

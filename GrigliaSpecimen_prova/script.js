@@ -30,7 +30,9 @@ const vsRota = document.getElementById('vs-rota');
 function aggiornaSliderVerticali() {
   const g = gruppiFont[0];
   [[vsSize, g.size], [vsRota, g.rota]].forEach(([col, s]) => {
-    const t = (s.value - s.min) / (s.max - s.min);
+    const t0 = (s.value - s.min) / (s.max - s.min);
+    const t = (s === g.rota) ? 1 - Math.abs(2 * t0 - 1) : t0;   // rota: andata e ritorno, senza salti
+    col.querySelector('.slider-pomello').style.setProperty('--t', t);
     col.querySelector('.slider-pomello').style.setProperty('--t', t);
     col.querySelector('.slider-valore').textContent = Math.round(s.value);
   });
@@ -207,7 +209,7 @@ function aggiornaFilettiTecnici() {
 
     wrapper.style.setProperty('--box-left', `${tr.left - wr.left}px`);
     wrapper.style.setProperty('--box-right', `${tr.right - wr.left}px`);
-    
+
     // Moltiplica la larghezza per il rapporto esatto e arrotonda per eccesso verso l'alto
     if (widthValEl) {
       const trWidth = tr.width * 6.501; //* 5.86 Sul 27''
@@ -303,3 +305,209 @@ if (document.fonts) {
 })();
 
 aggiornaSliderVerticali();
+
+// =====================================================
+//  NOMI, PUNTEGGIO E SCHERMATE
+// =====================================================
+
+// --- Da regolare ---
+const NOMI = ['Dadi', 'Laura'];     // [Player 1 (rosso), Player 2 (blu)]
+const MS_PER_LETTERA = 2000;        // tempo di ogni lettera nel quadrato grande
+const PUNTI_MAX = 3;                // pallini mostrati
+
+let punteggi = [0, 0];
+let schermata = 1;                  // 1 = lettere grandi, 2 = punteggio grande
+let indiceLettera = [0, 0];
+
+const testiGrandi = [
+  document.querySelector('.item-grande.pl1 .text-grande'),
+  document.querySelector('.item-grande.pl2 .text-grande'),
+];
+const testiPiccoli = [
+  document.querySelector('.item-piccolo.pl1 .text-piccolo'),
+  document.querySelector('.item-piccolo.pl2 .text-piccolo'),
+];
+
+// Cambia solo il testo, senza toccare il marcatore della baseline dentro al <p>
+function setTesto(p, s) {
+  const n = p.firstChild;
+  if (n && n.nodeType === 3) {
+    if (n.nodeValue !== s) n.nodeValue = s;
+  } else {
+    p.insertBefore(document.createTextNode(s), p.firstChild);
+  }
+}
+
+function aggiornaPallini() {
+  document.querySelectorAll('.punti').forEach(box => {
+    const i = Number(box.dataset.pl);
+    box.querySelectorAll('.punto').forEach((p, j) => {
+      p.classList.toggle('pieno', j < punteggi[i]);
+    });
+  });
+}
+
+function aggiornaTesti() {
+  for (let i = 0; i < 2; i++) {
+    const nome = NOMI[i] || '?';
+    const lettera = nome[indiceLettera[i] % nome.length];
+    const punti = String(punteggi[i]);
+
+    setTesto(testiGrandi[i], schermata === 1 ? lettera : punti);
+    setTesto(testiPiccoli[i], schermata === 1 ? punti : nome[0]);   // piccolo: iniziale ferma
+  }
+  aggiornaPallini();
+  adattaGlifi();   // riposiziona glifo e filetti verticali
+}
+
+// Scorrimento lettere (solo schermata 1, quadrato grande)
+setInterval(() => {
+  if (schermata !== 1) return;
+  indiceLettera = indiceLettera.map(n => n + 1);
+  aggiornaTesti();
+}, MS_PER_LETTERA);
+
+function setSchermata(n) {
+  schermata = n;
+  document.body.classList.toggle('schermata-2', n === 2);
+  indiceLettera = [0, 0];
+  aggiornaTesti();
+}
+
+// Tasti 1 e 2 per cambiare schermata
+window.addEventListener('keydown', (e) => {
+  if (document.activeElement.tagName === 'INPUT') return;
+  if (e.key === '1') setSchermata(1);
+  if (e.key === '2') setSchermata(2);
+});
+
+// Chiamata da tracking.js quando Processing manda "S:p1,p2"
+window.aggiornaPunteggio = function (p1, p2) {
+  punteggi = [
+    Math.min(PUNTI_MAX, Math.max(0, Math.round(p1))),
+    Math.min(PUNTI_MAX, Math.max(0, Math.round(p2))),
+  ];
+  aggiornaTesti();
+};
+
+aggiornaTesti();
+
+// =====================================================
+//  LED WALL: matrice di pallini con testo a scorrimento in loop
+//  Il testo viene disegnato a bassa risoluzione (1 pixel = 1 pallino)
+//  e poi tradotto in pallini accesi / spenti, frame per frame.
+// =====================================================
+
+// --- Da regolare ---
+const TICKER_TESTO = 'Lineto DMT Variable — CV524 SUPSI 2026/27  ';  // gli spazi finali creano il vuoto tra le ripetizioni
+const TICKER_ALTEZZA = 0.65;          // altezza delle maiuscole rispetto al riquadro (0.7 = 70%)
+const TICKER_SPAZIATURA = -0.06;     // spaziatura tra le lettere, in em (come prima)
+const TICKER_CAMBIO_MS = 3000;       // ogni quanto cambiano i valori del font
+const TICKER_TRANSIZIONE_MS = 1500;  // durata del passaggio fluido tra due set (meglio < CAMBIO)
+
+const LED_RIGHE = 40;                // righe di pallini: più alto = griglia più fitta (32, 40, 48...)
+const LED_VELOCITA = 10;             // colonne di pallini al secondo: più alto = più veloce
+const LED_SOGLIA = 0.45;             // 0-1: più basso = lettere più "piene", più alto = più sottili
+const LED_RAGGIO = 0.38;             // raggio del pallino rispetto al passo (0.5 = si toccano)
+const LED_ACCESO = '#000000';
+const LED_SPENTO = 'rgba(0, 0, 0, 0.12)';
+
+// Intervalli casuali: a ogni cambio ogni asse prende un valore a caso tra min e max
+const TICKER_RANGE = {
+  wght: [300, 700],
+  rota: [0, 360],
+  size: [0, 100],
+};
+
+const ledBox = document.querySelector('.ticker');
+const ledCanvas = document.getElementById('led-canvas');
+const ledCtx = ledCanvas.getContext('2d');
+
+// Canvas di lavoro, nascosto ma agganciato alla pagina: serve perché il canvas
+// legga gli assi del font (wght, ROTA, SIZE) dal suo stile CSS
+const ledSrc = document.createElement('canvas');
+ledSrc.style.cssText = 'position:fixed;left:-9999px;top:0;pointer-events:none;';
+document.body.appendChild(ledSrc);
+const srcCtx = ledSrc.getContext('2d', { willReadFrequently: true });
+
+// --- Valori del font: transizione fluida calcolata a mano ---
+const rnd = ([min, max]) => Math.round(min + Math.random() * (max - min));
+const ease = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+let vAttuali = { wght: 450, rota: 0, size: 0 };
+let vDa = { ...vAttuali };
+let vA = { ...vAttuali };
+let tCambio = performance.now();
+
+function nuoviValoriCasuali() {
+  vDa = { ...vAttuali };
+  vA = { wght: rnd(TICKER_RANGE.wght), rota: rnd(TICKER_RANGE.rota), size: rnd(TICKER_RANGE.size) };
+  tCambio = performance.now();
+}
+nuoviValoriCasuali();
+setInterval(nuoviValoriCasuali, TICKER_CAMBIO_MS);
+
+// --- Disegno ---
+let ledOff = null;
+let ledPrec = performance.now();
+
+function ledFrame(t) {
+  requestAnimationFrame(ledFrame);
+
+  const dt = Math.min(0.1, (t - ledPrec) / 1000);
+  ledPrec = t;
+
+  const W = ledCanvas.clientWidth, H = ledCanvas.clientHeight;
+  if (!W || !H) return;
+
+  // dimensioni: il canvas visibile è nitido, quello di lavoro ha 1 pixel per pallino
+  const dpr = window.devicePixelRatio || 1;
+  const cw = Math.round(W * dpr), ch = Math.round(H * dpr);
+  if (ledCanvas.width !== cw || ledCanvas.height !== ch) { ledCanvas.width = cw; ledCanvas.height = ch; }
+
+  const passo = ch / LED_RIGHE;
+  const cols = Math.ceil(cw / passo);
+  if (ledSrc.width !== cols || ledSrc.height !== LED_RIGHE) { ledSrc.width = cols; ledSrc.height = LED_RIGHE; }
+  if (ledOff === null) ledOff = cols;   // parte da destra
+
+  // valori del font di questo frame
+  const k = ease(Math.min(1, Math.max(0, (t - tCambio) / TICKER_TRANSIZIONE_MS)));
+  for (const a of ['wght', 'rota', 'size']) vAttuali[a] = vDa[a] + (vA[a] - vDa[a]) * k;
+  ledSrc.style.fontVariationSettings =
+    `'wght' ${vAttuali.wght.toFixed(1)}, 'ROTA' ${vAttuali.rota.toFixed(1)}, 'SIZE' ${vAttuali.size.toFixed(1)}`;
+
+  // testo sul canvas di lavoro (maiuscole alte TICKER_ALTEZZA, centrate in verticale)
+  const altMaiuscole = LED_RIGHE * TICKER_ALTEZZA;
+  const fs = altMaiuscole / capRatio;
+  srcCtx.clearRect(0, 0, cols, LED_RIGHE);
+  srcCtx.font = `${fs}px DMT`;
+  srcCtx.textBaseline = 'alphabetic';
+  srcCtx.fillStyle = '#000';
+  if ('letterSpacing' in srcCtx) srcCtx.letterSpacing = (TICKER_SPAZIATURA * fs) + 'px';
+
+  const unit = srcCtx.measureText(TICKER_TESTO).width;   // larghezza di una ripetizione
+  if (unit > 1) {
+    ledOff -= LED_VELOCITA * dt;
+    if (ledOff <= -unit) ledOff %= unit;                  // loop senza vuoti
+    const base = (LED_RIGHE + altMaiuscole) / 2;
+    for (let x = ledOff; x < cols; x += unit) srcCtx.fillText(TICKER_TESTO, Math.round(x), base);
+  }
+
+  // da pixel a pallini
+  const px = srcCtx.getImageData(0, 0, cols, LED_RIGHE).data;
+  const r = passo * LED_RAGGIO;
+  const acceso = new Path2D(), spento = new Path2D();
+  for (let y = 0; y < LED_RIGHE; y++) {
+    for (let x = 0; x < cols; x++) {
+      const on = px[(y * cols + x) * 4 + 3] / 255 > LED_SOGLIA;
+      const cx = (x + 0.5) * passo, cy = (y + 0.5) * passo;
+      const p = on ? acceso : spento;
+      p.moveTo(cx + r, cy);
+      p.arc(cx, cy, r, 0, Math.PI * 2);
+    }
+  }
+  ledCtx.clearRect(0, 0, cw, ch);
+  ledCtx.fillStyle = LED_SPENTO; ledCtx.fill(spento);
+  ledCtx.fillStyle = LED_ACCESO; ledCtx.fill(acceso);
+}
+requestAnimationFrame(ledFrame);

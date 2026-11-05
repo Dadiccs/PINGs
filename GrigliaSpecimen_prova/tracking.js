@@ -5,6 +5,9 @@ const statusEl = document.getElementById("status");
 const coordsEl = document.getElementById("coords");
 const pickHintEl = document.getElementById("pick-hint");
 const wsStatusEl = document.getElementById("wsStatus");
+// Camera sempre visibile nella pagina (copia quadrata del canvas del pannello S)
+const liveCanvas = document.getElementById("canvas-live");
+const liveCtx = liveCanvas ? liveCanvas.getContext("2d") : null;
 
 const MIN_BLOB_AREA = 500;
 const MATRIX_LIGHT_DELAY_MS = 1000;
@@ -25,12 +28,20 @@ function connectSocket() {
         wsStatusEl.style.color = "orange";
         setTimeout(connectSocket, 3000);
     };
-    // Messaggi da Processing: "B:x,y,vx,vy" (pallina)
+    // Messaggi da Processing: "B:x,y,vx,vy" (pallina) e "S:p1,p2" (punteggio)
     processingSocket.onmessage = (e) => {
-        if (typeof e.data !== "string" || !e.data.startsWith("B:")) return;
-        const [x, y, vx, vy] = e.data.substring(2).split(",").map(Number);
-        if ([x, y, vx, vy].every(Number.isFinite) && window.aggiornaPallina) {
-            window.aggiornaPallina({ x, y, vx, vy });
+        if (typeof e.data !== "string") return;
+
+        if (e.data.startsWith("B:")) {
+            const [x, y, vx, vy] = e.data.substring(2).split(",").map(Number);
+            if ([x, y, vx, vy].every(Number.isFinite) && window.aggiornaPallina) {
+                window.aggiornaPallina({ x, y, vx, vy });
+            }
+        } else if (e.data.startsWith("S:")) {
+            const [p1, p2] = e.data.substring(2).split(",").map(Number);
+            if ([p1, p2].every(Number.isFinite) && window.aggiornaPunteggio) {
+                window.aggiornaPunteggio(p1, p2);
+            }
         }
     };
     processingSocket.onerror = () => {
@@ -236,7 +247,7 @@ function sendPlayerToProcessing(playerBoxes) {
     } else {
         sendToProcessing("P1:");
     }
-    
+
     if (playerBoxes[1]) {
         const left = playerBoxes[1].x / matrixArea.width;
         const top = playerBoxes[1].y / matrixArea.height;
@@ -272,7 +283,7 @@ function detectMatrixArea(hsv) {
         if (area > 500 && area > maxArea) {
             maxArea = area;
             let rect = cv.boundingRect(contour);
-            
+
             // Espande l'area del 5% su ogni lato
             let padX = rect.width * 0.05;
             let padY = rect.height * 0.05;
@@ -315,7 +326,7 @@ function processFrame() {
         if (matrixArea.width > 0 && matrixArea.height > 0) {
             colorDetectors.forEach((det, index) => {
                 if (!det.enabled) return;
-                
+
                 let matrixHsv = hsv.roi(matrixArea);
                 let mask = buildMask(matrixHsv, det.ranges);
                 let contours = new cv.MatVector();
@@ -342,9 +353,9 @@ function processFrame() {
                     ctx.strokeRect(matrixArea.x + pBox.x, matrixArea.y + pBox.y, pBox.width, pBox.height);
                 }
 
-                matrixHsv.delete(); 
-                mask.delete(); 
-                contours.delete(); 
+                matrixHsv.delete();
+                mask.delete();
+                contours.delete();
                 hierarchy.delete();
             });
         }
@@ -360,14 +371,18 @@ function processFrame() {
         // Aggiorna la griglia con gli stessi valori normalizzati (0-1) mandati a Processing
         if (window.aggiornaGriglia) {
             window.aggiornaGriglia(playerBoxes.map(b => b && {
-                left:   b.x / matrixArea.width,
-                top:    b.y / matrixArea.height,
-                right:  (b.x + b.width)  / matrixArea.width,
+                left: b.x / matrixArea.width,
+                top: b.y / matrixArea.height,
+                right: (b.x + b.width) / matrixArea.width,
                 bottom: (b.y + b.height) / matrixArea.height
             }));
         }
-
-        src.delete(); 
+        if (liveCtx) {
+            const lato = Math.min(canvas.width, canvas.height);
+            liveCtx.drawImage(canvas, (canvas.width - lato) / 2, (canvas.height - lato) / 2, lato, lato,
+                0, 0, liveCanvas.width, liveCanvas.height);
+        }
+        src.delete();
         hsv.delete();
     } catch (err) {
         console.error("Errore nel processing frame:", err);

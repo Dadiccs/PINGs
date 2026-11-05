@@ -10,169 +10,191 @@
 
 <body>
     <!-- GRIGLIA PRINCIPALE (VISIBILE) -->
-    <div class="quadrato-esterno">
-        <div class="flex-container">
-            <div class="item-grande pl1">
-                <div class="technical-wrapper">
-                    <div class="bbox-orizzontale-valore wght-val">
-                        w: <span class="wght-num">450</span>
-                    </div>
-                    <!-- Filetto 1: Typo Ascender (1920) -> ~10% dall'alto -->
-                    <div class="filetto-orizzontale" style="top: 10%;">
-                        <div class="linea"></div>
-                        <div class="etichetta"><span>Typo ascender</span><span>1920</span></div>
-                    </div>
+    <div class="pagina">
+        <div class="quadrato-camera">
+            <canvas id="canvas-live" width="480" height="480"></canvas>
+        </div>
+        <div class="quadrato-esterno">
+            <div class="flex-container">
+                <div class="item-grande pl1">
+                    <div class="technical-wrapper">
+                        <div class="bbox-orizzontale-valore wght-val">
+                            w: <span class="wght-num">450</span>
+                        </div>
+                        <!-- Filetto 1: Typo Ascender (1920) -> ~10% dall'alto -->
+                        <div class="filetto-orizzontale" style="top: 10%;">
+                            <div class="linea"></div>
+                            <div class="etichetta"><span>Typo ascender</span><span>1920</span></div>
+                        </div>
 
-                    <!-- Filetto 2: Cap Height (1420) -> ~30.7% dall'alto -->
-                    <div class="filetto-orizzontale" style="top: 30.7%;">
-                        <div class="linea"></div>
-                        <div class="etichetta"><span>Cap Height</span><span>1420</span></div>
-                    </div>
+                        <!-- Filetto 2: Cap Height (1420) -> ~30.7% dall'alto -->
+                        <div class="filetto-orizzontale" style="top: 30.7%;">
+                            <div class="linea"></div>
+                            <div class="etichetta"><span>Cap Height</span><span>1420</span></div>
+                        </div>
 
-                    <!-- Filetto 3: x-Height (1124) -> ~43% dall'alto -->
-                    <div class="filetto-orizzontale" style="top: 41%;">
-                        <div class="linea"></div>
-                        <div class="etichetta"><span>x-Height</span><span>1124</span></div>
-                    </div>
+                        <!-- Filetto 3: x-Height (1124) -> ~43% dall'alto -->
+                        <div class="filetto-orizzontale" style="top: 41%;">
+                            <div class="linea"></div>
+                            <div class="etichetta"><span>x-Height</span><span>1124</span></div>
+                        </div>
 
-                    <!-- Filetto 4: Baseline (0) -> esattamente al 79.6% dall'alto -->
-                    <div class="filetto-orizzontale" style="top: 79.6%;">
-                        <div class="linea linea-continua"></div>
-                        <div class="etichetta"><span>Baseline</span><span>0</span></div>
-                    </div>
+                        <!-- Filetto 4: Baseline (0) -> esattamente al 79.6% dall'alto -->
+                        <div class="filetto-orizzontale" style="top: 79.6%;">
+                            <div class="linea linea-continua"></div>
+                            <div class="etichetta"><span>Baseline</span><span>0</span></div>
+                        </div>
 
-                    <!-- Filetto 5: Typo Descender (-490) -> ~100% (fondo) -->
-                    <div class="filetto-orizzontale filetto-ultimo" style="top: 97%;">
-                        <div class="linea"></div>
-                        <div class="etichetta"><span>Typo Descender</span><span>-490</span></div>
-                    </div>
+                        <!-- Filetto 5: Typo Descender (-490) -> ~100% (fondo) -->
+                        <div class="filetto-orizzontale filetto-ultimo" style="top: 97%;">
+                            <div class="linea"></div>
+                            <div class="etichetta"><span>Typo Descender</span><span>-490</span></div>
+                        </div>
 
-                    <!-- Filetti verticali -->
-                    <div class="filetto verticale sinistro" style="left: var(--box-left, 0px);"></div>
-                    <div class="filetto verticale destro" style="left: var(--box-right, 0px);"></div>
+                        <!-- Filetti verticali -->
+                        <div class="filetto verticale sinistro" style="left: var(--box-left, 0px);"></div>
+                        <div class="filetto verticale destro" style="left: var(--box-right, 0px);"></div>
 
-                    <p class="text-grande" style="font-variation-settings: 'wght' 450, 'ROTA' 0, 'SIZE' 0;">%</p>
+                        <!-- punteggio player 1 -->
+                        <div class="punti" data-pl="0">
+                            <span class="punto"></span><span class="punto"></span><span class="punto"></span>
+                        </div>
 
-                    <div class="bbox-orizzontale-valore">
-                        <span class="bbox-width-val">0</span>
-                    </div>
-                </div>
-            </div>
+                        <p class="text-grande" style="font-variation-settings: 'wght' 450, 'ROTA' 0, 'SIZE' 0;">D</p>
 
-            <div class="item-grande pl2">
-                <div class="technical-wrapper">
-                    <!-- Filetto 1: Typo Ascender (1920) -->
-                    <div class="filetto-orizzontale" style="top: 10%;">
-                        <div class="linea"></div>
-                        <div class="etichetta"><span>Typo ascender</span><span>1920</span></div>
-                    </div>
-
-                    <!-- Filetto 2: Cap Height (1420) -->
-                    <div class="filetto-orizzontale" style="top: 30.7%;">
-                        <div class="linea"></div>
-                        <div class="etichetta"><span>Cap Height</span><span>1420</span></div>
-                    </div>
-
-                    <!-- Filetto 3: x-Height (1124) -->
-                    <div class="filetto-orizzontale" style="top: 41%;">
-                        <div class="linea"></div>
-                        <div class="etichetta"><span>x-Height</span><span>1124</span></div>
-                    </div>
-
-                    <!-- Filetto 4: Baseline (0) -->
-                    <div class="filetto-orizzontale" style="top: 79.6%;">
-                        <div class="linea linea-continua"></div>
-                        <div class="etichetta"><span>Baseline</span><span>0</span></div>
-                    </div>
-
-                    <!-- Filetto 5: Typo Descender (-490) -->
-                    <div class="filetto-orizzontale filetto-ultimo" style="top: 100%;">
-                        <div class="linea"></div>
-                        <div class="etichetta"><span>Typo Descender</span><span>-490</span></div>
-                    </div>
-
-                    <!-- Filetti verticali -->
-                    <div class="filetto verticale sinistro" style="left: var(--box-left, 0px);"></div>
-                    <div class="filetto verticale destro" style="left: var(--box-right, 0px);"></div>
-
-                    <p class="text-grande" style="font-variation-settings: 'wght' 450, 'ROTA' 0, 'SIZE' 0;">P</p>
-
-                    <div class="bbox-orizzontale-valore">
-                        <span class="bbox-width-val">0</span>
-                    </div>
-                    <div class="bbox-orizzontale-valore wght-val">
-                        w: <span class="wght-num">450</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Contachilometri -->
-            <div class="item-piccolo base contachilometri">
-                <div class="cerchio-tratteggiato-container">
-                    <div class="cerchio-tratteggiato"></div>
-                    <div class="lancetta"></div>
-                    <span class="testo-velocita"><strong>67</strong></span>
-                </div>
-                <div class="bbox-orizzontale-valore kmh-label">km/h</div>
-            </div>
-
-            <div class="item-piccolo pl1">
-                <p class="text-piccolo">1</p>
-            </div>
-            <div class="item-piccolo pl2">
-                <p class="text-piccolo">2</p>
-            </div>
-
-            <!-- Doppio slider verticale -->
-            <div class="item-lungo-verticale base">
-                <div class="slider-col" id="vs-size">
-                    <span class="slider-testo">s: <span class="slider-valore">0</span></span>
-                    <div class="slider-pista">
-                        <div class="slider-corsa">
-                            <div class="slider-pomello"></div>
+                        <div class="bbox-orizzontale-valore">
+                            <span class="bbox-width-val">0</span>
                         </div>
                     </div>
                 </div>
-                <div class="slider-col" id="vs-rota">
-                    <span class="slider-testo">r: <span class="slider-valore">0</span></span>
-                    <div class="slider-pista">
-                        <div class="slider-corsa">
-                            <div class="slider-pomello"></div>
+
+                <div class="item-grande pl2">
+                    <div class="technical-wrapper">
+                        <!-- Filetto 1: Typo Ascender (1920) -->
+                        <div class="filetto-orizzontale" style="top: 10%;">
+                            <div class="linea"></div>
+                            <div class="etichetta"><span>Typo ascender</span><span>1920</span></div>
+                        </div>
+
+                        <!-- Filetto 2: Cap Height (1420) -->
+                        <div class="filetto-orizzontale" style="top: 30.7%;">
+                            <div class="linea"></div>
+                            <div class="etichetta"><span>Cap Height</span><span>1420</span></div>
+                        </div>
+
+                        <!-- Filetto 3: x-Height (1124) -->
+                        <div class="filetto-orizzontale" style="top: 41%;">
+                            <div class="linea"></div>
+                            <div class="etichetta"><span>x-Height</span><span>1124</span></div>
+                        </div>
+
+                        <!-- Filetto 4: Baseline (0) -->
+                        <div class="filetto-orizzontale" style="top: 79.6%;">
+                            <div class="linea linea-continua"></div>
+                            <div class="etichetta"><span>Baseline</span><span>0</span></div>
+                        </div>
+
+                        <!-- Filetto 5: Typo Descender (-490) -->
+                        <div class="filetto-orizzontale filetto-ultimo" style="top: 100%;">
+                            <div class="linea"></div>
+                            <div class="etichetta"><span>Typo Descender</span><span>-490</span></div>
+                        </div>
+
+                        <!-- Filetti verticali -->
+                        <div class="filetto verticale sinistro" style="left: var(--box-left, 0px);"></div>
+                        <div class="filetto verticale destro" style="left: var(--box-right, 0px);"></div>
+
+                        <!-- Punteggio player 2 -->
+                        <div class="punti" data-pl="1">
+                            <span class="punto"></span><span class="punto"></span><span class="punto"></span>
+                        </div>
+
+                        <p class="text-grande" style="font-variation-settings: 'wght' 450, 'ROTA' 0, 'SIZE' 0;">P</p>
+
+                        <div class="bbox-orizzontale-valore">
+                            <span class="bbox-width-val">0</span>
+                        </div>
+                        <div class="bbox-orizzontale-valore wght-val">
+                            w: <span class="wght-num">450</span>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="item-piccolo base campo">
-                <canvas class="traccia-pallina" id="traccia-pallina"></canvas>
-                <div class="paddle rosso" style="--pos-y: 55%;"></div>
-                <div class="paddle blu" style="--pos-y: 25%;"></div>
-                <div class="bbox-orizzontale-valore coord-pallina">
-                    x: <span id="pallina-x">0</span> y: <span id="pallina-y">0</span>
+                <!-- Contachilometri -->
+                <div class="item-piccolo base contachilometri">
+                    <div class="cerchio-tratteggiato-container">
+                        <div class="cerchio-tratteggiato"></div>
+                        <div class="lancetta"></div>
+                        <span class="testo-velocita"><strong>67</strong></span>
+                    </div>
+                    <div class="bbox-orizzontale-valore kmh-label">km/h</div>
                 </div>
-            </div>
 
-            <div class="item-lungo base">
-                <p id="text-alfabeto">A B C D E F G H I J K<br> L M N O P Q R S T U V <br>W X Y Z <br>1 2 3 4 5 6 7 8 9
-                    0</p>
-                <p class="text-DMT">D<br>M<br>T</p>
-            </div>
+                <div class="item-piccolo pl1">
+                    <p class="text-piccolo">1</p>
 
-            <!-- Slider originali: restano nel DOM (li usa lo script) ma nascosti -->
-            <div style="display:none">
-                <div class="controlli-font">
-                    <label>Weight: <input type="range" id="slider-wght" min="300" max="700" value="450"></label>
-                    <label>Rotation: <input type="range" id="slider-rota" min="0" max="360" value="0"></label>
-                    <label>Size: <input type="range" id="slider-size" min="0" max="100" value="0"></label>
+                    <div class="punti" data-pl="0">
+                        <span class="punto"></span><span class="punto"></span><span class="punto"></span>
+                    </div>
                 </div>
-                <div class="controlli-font2">
-                    <label>Weight: <input type="range" id="slider-wght-2" min="300" max="700" value="450"></label>
-                    <label>Rotation: <input type="range" id="slider-rota-2" min="0" max="360" value="0"></label>
-                    <label>Size: <input type="range" id="slider-size-2" min="0" max="100" value="0"></label>
+                <div class="item-piccolo pl2">
+                    <p class="text-piccolo">2</p>
+
+                    <div class="punti" data-pl="1">
+                        <span class="punto"></span><span class="punto"></span><span class="punto"></span>
+                    </div>
+                </div>
+
+                <!-- Doppio slider verticale -->
+                <div class="item-lungo-verticale base">
+                    <div class="slider-col" id="vs-size">
+                        <span class="slider-testo">s: <span class="slider-valore">0</span></span>
+                        <div class="slider-pista">
+                            <div class="slider-corsa">
+                                <div class="slider-pomello"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-col" id="vs-rota">
+                        <span class="slider-testo">r: <span class="slider-valore">0</span></span>
+                        <div class="slider-pista">
+                            <div class="slider-corsa">
+                                <div class="slider-pomello"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-piccolo base campo">
+                    <canvas class="traccia-pallina" id="traccia-pallina"></canvas>
+                    <div class="paddle rosso" style="--pos-y: 55%;"></div>
+                    <div class="paddle blu" style="--pos-y: 25%;"></div>
+                    <div class="bbox-orizzontale-valore coord-pallina">
+                        x: <span id="pallina-x">0</span> y: <span id="pallina-y">0</span>
+                    </div>
+                </div>
+
+                <div class="item-lungo base">
+                    <div class="ticker">
+                        <canvas id="led-canvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- Slider originali: restano nel DOM (li usa lo script) ma nascosti -->
+                <div style="display:none">
+                    <div class="controlli-font">
+                        <label>Weight: <input type="range" id="slider-wght" min="300" max="700" value="450"></label>
+                        <label>Rotation: <input type="range" id="slider-rota" min="0" max="360" value="0"></label>
+                        <label>Size: <input type="range" id="slider-size" min="0" max="100" value="0"></label>
+                    </div>
+                    <div class="controlli-font2">
+                        <label>Weight: <input type="range" id="slider-wght-2" min="300" max="700" value="450"></label>
+                        <label>Rotation: <input type="range" id="slider-rota-2" min="0" max="360" value="0"></label>
+                        <label>Size: <input type="range" id="slider-size-2" min="0" max="100" value="0"></label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- PANNELLO IMPOSTAZIONI NASCOSTO (si apre/chiude con il tasto S) -->
     <div class="settings-modal" id="settingsModal">
         <div class="settings-content">

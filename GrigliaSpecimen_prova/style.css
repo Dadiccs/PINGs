@@ -17,7 +17,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffffff;
+    background-color: #000000;
     position: relative;
 }
 
@@ -660,4 +660,99 @@ body {
     left: 6px;
     transform: none;
     color: #000;
+}
+
+/* ===== Pallini punteggio ===== */
+.item-piccolo.pl1,
+.item-piccolo.pl2 { position: relative; }
+
+.punti {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    display: none;
+    gap: 4px;
+    z-index: 3;
+    pointer-events: none;
+}
+.punto {
+    width: 8px;
+    height: 8px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 1px solid #fff;
+}
+.punto.pieno { background: #fff; }
+
+/* Visibili solo nel riquadro che mostra il punteggio */
+body:not(.schermata-2) .item-piccolo .punti { display: flex; }
+body.schermata-2 .item-grande .punti { display: flex; }
+.item-piccolo .punti { right: 8px; }
+
+/* ===== LED wall a scorrimento ===== */
+.ticker {
+    flex: 1;
+    min-width: 0;
+    align-self: stretch;          /* altezza = quella del riquadro */
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.ticker-track {
+    display: inline-flex;
+    flex: none;
+    white-space: pre;             /* mantiene gli spazi di fine stringa */
+    font-family: "DMT";
+    color: #000;
+    line-height: 1;
+    letter-spacing: -0.18em;      /* stessa spaziatura che avevi sull'alfabeto */
+    will-change: transform;
+}
+.ticker-track > span { flex: none; }
+
+.item-grande .punti { top: 10px; right: 14px; gap: 8px; }
+.item-grande .punto { width: 18px; height: 18px; border-width: 2px; }
+
+.filetto.verticale {
+    transition: left 0.3s ease-in-out;
+}
+
+.item-lungo { padding: 0; }
+.ticker { position: relative; width: 100%; height: 100%; flex: none; align-self: auto; overflow: hidden; }
+.ticker-track { position: absolute; left: 0; top: 0; bottom: 0; align-items: center; }
+
+/* ===== Pannello webcam a sinistra ===== */
+:root {
+    --cam-scala: 1;   /* lato del quadrato camera rispetto alla griglia (1 = grande uguale) */
+    --S: min(80vh, calc((100vw - 48px) / (1 + var(--cam-scala))));
+}
+.pagina { display: flex; align-items: flex-start; gap: 16px; }
+.quadrato-esterno { width: var(--S); max-width: none; }
+.quadrato-camera {
+    width: calc(var(--S) * var(--cam-scala));
+    aspect-ratio: 1 / 1;
+    flex: none;
+    box-sizing: border-box;
+    padding: var(--padding);
+    background-color: #adadad;
+    border-radius: 12px;
+}
+.quadrato-camera canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    background-color: #dadada;
+}
+
+.item-lungo { padding: 0; }
+.ticker { position: relative; width: 100%; height: 100%; flex: none; align-self: auto; overflow: hidden; }
+#led-canvas {
+    position: absolute;
+    left: var(--padding);
+    top: var(--padding);
+    width: calc(100% - 2 * var(--padding));
+    height: calc(100% - 2 * var(--padding));
+    display: block;
 }
